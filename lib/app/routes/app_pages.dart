@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:myapp/app/modules/transaksi/bindings/transaksi_binding.dart';
 
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
@@ -8,8 +9,7 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
-import '../modules/mahasiswa/bindings/mahasiswa_binding.dart';
-import '../modules/mahasiswa/views/mahasiswa_view.dart';
+import '../modules/transaksi/views/transaksi_view.dart';
 import '../modules/reset_password/bindings/reset_password_binding.dart';
 import '../modules/reset_password/views/reset_password_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
@@ -44,9 +44,9 @@ class AppPages {
       binding: ResetPasswordBinding(),
     ),
     GetPage(
-      name: _Paths.MAHASISWA,
-      page: () => MahasiswaView(),
-      binding: MahasiswaBinding(),
+      name: _Paths.TRANSAKSI,
+      page: () => TransaksiView(),
+      binding: TransaksiBinding(),
     ),
     GetPage(
       name: _Paths.DOSEN,

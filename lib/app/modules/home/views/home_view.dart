@@ -4,8 +4,8 @@ import 'package:myapp/app/controllers/auth_controller.dart';
 import 'package:myapp/app/modules/dashboard/views/dashboard_view.dart';
 import 'package:myapp/app/modules/dosen/views/dosen_add_view.dart';
 import 'package:myapp/app/modules/dosen/views/dosen_view.dart';
-import 'package:myapp/app/modules/mahasiswa/views/mahasiswa_add_view.dart';
-import 'package:myapp/app/modules/mahasiswa/views/mahasiswa_view.dart';
+import 'package:myapp/app/modules/transaksi/views/transaksi_add_view.dart';
+import 'package:myapp/app/modules/transaksi/views/transaksi_view.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -34,9 +34,9 @@ class _DashboardAdminState extends State<DashboardAdmin> {
     },
     {
       'title': 'Data Transaksi',
-      'view': MahasiswaView(),
+      'view': TransaksiView(),
       'icon': Icons.receipt,
-      'add': () => MahasiswaAddView(),
+      'add': () => TransaksiAddView(),
     },
     {
       'title': 'Laporan',

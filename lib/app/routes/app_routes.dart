@@ -7,7 +7,7 @@ abstract class Routes {
   static const LOGIN = _Paths.LOGIN;
   static const SIGNUP = _Paths.SIGNUP;
   static const RESET_PASSWORD = _Paths.RESET_PASSWORD;
-  static const MAHASISWA = _Paths.MAHASISWA;
+  static const TRANSAKSI = _Paths.TRANSAKSI;
   static const DOSEN = _Paths.DOSEN;
   static const DASHBOARD = _Paths.DASHBOARD;
 }
@@ -18,7 +18,7 @@ abstract class _Paths {
   static const LOGIN = '/login';
   static const SIGNUP = '/signup';
   static const RESET_PASSWORD = '/reset-password';
-  static const MAHASISWA = '/mahasiswa';
+  static const TRANSAKSI = '/transaksi';
   static const DOSEN = '/dosen';
   static const DASHBOARD = '/dashboard';
 }

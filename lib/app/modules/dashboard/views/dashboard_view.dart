@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/dashboard_controller.dart';
 import 'package:myapp/app/modules/dosen/views/dosen_view.dart'; // Import halaman Mahasiswa
-import 'package:myapp/app/modules/mahasiswa/views/mahasiswa_view.dart'; // Import halaman Dosen
+import 'package:myapp/app/modules/transaksi/views/transaksi_view.dart'; // Import halaman Dosen
 
 class DashboardView extends GetView<DashboardController> {
   const DashboardView({super.key});
@@ -71,7 +71,7 @@ class DashboardView extends GetView<DashboardController> {
                   'Riwayat Transaksi',
                   Icons.history,
                   Colors.blue,
-                  () => Get.to(() => MahasiswaView()), // Navigasi ke MahasiswaView
+                  () => Get.to(() => TransaksiView()), // Navigasi ke MahasiswaView
                 ),
                 _buildMenuCard(
                   'Laporan',

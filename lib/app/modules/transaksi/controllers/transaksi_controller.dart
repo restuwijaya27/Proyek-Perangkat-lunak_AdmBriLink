@@ -2,38 +2,44 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MahasiswaController extends GetxController {
-  //TODO: Implement MahasiswaController
-  late TextEditingController cNpm;
+class TransaksiController extends GetxController {
   late TextEditingController cNama;
+  late TextEditingController cNomer_rekening;
+  late TextEditingController cJenis_transaksi;
+  late TextEditingController cNominal;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<QuerySnapshot<Object?>> GetData() async {
-    CollectionReference mahasiswa = firestore.collection('mahasiswa');
+    CollectionReference transaksi = firestore.collection('transaksi');
 
-    return mahasiswa.get();
+    return transaksi.get();
   }
 
   Stream<QuerySnapshot<Object?>> streamData() {
-    CollectionReference mahasiswa = firestore.collection('mahasiswa');
-    return mahasiswa.snapshots();
+    CollectionReference transaksi = firestore.collection('transaksi');
+    return transaksi.snapshots();
   }
 
-  void add(String npm, String nama) async {
-    CollectionReference mahasiswa = firestore.collection("mahasiswa");
+  void add(String nama, String nomer_rekening, String jenis_transaksi,
+      String nominal) async {
+    CollectionReference transaksi = firestore.collection("transaksi");
 
     try {
-      await mahasiswa.add({
-        "npm": npm,
+      await transaksi.add({
         "nama": nama,
+        "nomer_rekening": nomer_rekening,
+        "jenis_transaksi": jenis_transaksi,
+        "nominal": nominal,
       });
       Get.defaultDialog(
           title: "Berhasil",
-          middleText: "Berhasil menyimpan data mahasiswa",
+          middleText: "Berhasil menyimpan data transaksi",
           onConfirm: () {
-            cNpm.clear();
             cNama.clear();
+            cNomer_rekening.clear();
+            cJenis_transaksi.clear();
+            cNominal.clear();
             Get.back();
             Get.back();
             textConfirm:
@@ -43,32 +49,37 @@ class MahasiswaController extends GetxController {
       print(e);
       Get.defaultDialog(
         title: "Terjadi Kesalahan",
-        middleText: "Gagal Menambahkan Mahasiswa.",
+        middleText: "Gagal Menambahkan Transaksi.",
       );
     }
   }
 
   Future<DocumentSnapshot<Object?>> GetDataById(String id) async {
-    DocumentReference docRef = firestore.collection("mahasiswa").doc(id);
+    DocumentReference docRef = firestore.collection("transaksi").doc(id);
 
     return docRef.get();
   }
 
-  void Update(String npm, String nama, String id) async {
-    DocumentReference mahasiswaById = firestore.collection("mahasiswa").doc(id);
+  void Update(String nama, String nomer_rekening, String jenis_transaksi,
+      String nominal, String id) async {
+    DocumentReference transaksiById = firestore.collection("transaksi").doc(id);
 
     try {
-      await mahasiswaById.update({
-        "npm": npm,
+      await transaksiById.update({
         "nama": nama,
+        "nomer_rekening": nomer_rekening,
+        "jenis_transaksi": jenis_transaksi,
+        "nominal": nominal,
       });
 
       Get.defaultDialog(
         title: "Berhasil",
-        middleText: "Berhasil mengubah data Mahasiswa.",
+        middleText: "Berhasil mengubah data Transaksi.",
         onConfirm: () {
-          cNpm.clear();
           cNama.clear();
+          cNomer_rekening.clear();
+          cJenis_transaksi.clear();
+          cNominal.clear();
           Get.back();
           Get.back();
         },
@@ -78,13 +89,13 @@ class MahasiswaController extends GetxController {
       print(e);
       Get.defaultDialog(
         title: "Terjadi Kesalahan",
-        middleText: "Gagal Menambahkan Mahasiswa.",
+        middleText: "Gagal Menambahkan Transaksi.",
       );
     }
   }
 
   void delete(String id) {
-    DocumentReference docRef = firestore.collection("mahasiswa").doc(id);
+    DocumentReference docRef = firestore.collection("transaksi").doc(id);
 
     try {
       Get.defaultDialog(
@@ -113,16 +124,20 @@ class MahasiswaController extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
-    cNpm = TextEditingController();
     cNama = TextEditingController();
+    cNomer_rekening = TextEditingController();
+    cJenis_transaksi = TextEditingController();
+    cNominal = TextEditingController();
     super.onInit();
   }
 
   @override
   void onClose() {
     // TODO: implement onClose
-    cNpm.dispose();
     cNama.dispose();
+    cNomer_rekening.dispose();
+    cJenis_transaksi.dispose();
+    cNominal.dispose();
     super.onClose();
   }
 }
