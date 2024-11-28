@@ -1,19 +1,19 @@
 import 'package:get/get.dart';
-import 'package:myapp/app/modules/transaksi/bindings/transaksi_binding.dart';
 
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
-import '../modules/dosen/bindings/dosen_binding.dart';
-import '../modules/dosen/views/dosen_view.dart';
+import '../modules/laporan/bindings/laporan_binding.dart';
+import '../modules/laporan/views/laporan_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
-import '../modules/transaksi/views/transaksi_view.dart';
 import '../modules/reset_password/bindings/reset_password_binding.dart';
 import '../modules/reset_password/views/reset_password_view.dart';
 import '../modules/signup/bindings/signup_binding.dart';
 import '../modules/signup/views/signup_view.dart';
+import '../modules/transaksi/bindings/transaksi_binding.dart';
+import '../modules/transaksi/views/transaksi_view.dart';
 
 part 'app_routes.dart';
 
@@ -49,9 +49,9 @@ class AppPages {
       binding: TransaksiBinding(),
     ),
     GetPage(
-      name: _Paths.DOSEN,
-      page: () => DosenView(),
-      binding: DosenBinding(),
+      name: _Paths.LAPORAN,
+      page: () => LaporanView(),
+      binding: LaporanBinding(),
     ),
     GetPage(
       name: _Paths.DASHBOARD,

@@ -1,24 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myapp/app/modules/dosen/controllers/dosen_controller.dart';
-import 'package:myapp/app/modules/dosen/views/dosen_update_view.dart';
+import 'package:myapp/app/modules/laporan/controllers/laporan_controller.dart';
+import 'package:myapp/app/modules/transaksi/controllers/transaksi_controller.dart';
+import 'package:myapp/app/modules/transaksi/views/transaksi_update_view.dart';
+import 'package:intl/intl.dart'; // Add this for date formatting
 
-class DosenView extends GetView<DosenController> {
+class LaporanView extends GetView<LaporanController> {
   void showOption(String id) async {
     await Get.dialog(
       Dialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF0D47A1), Color(0xFF1565C0)],
+              colors: [Color(0xFF005DAA), Color(0xFF00A3E1)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(15),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -40,14 +42,14 @@ class DosenView extends GetView<DosenController> {
                 onTap: () {
                   Get.back();
                   Get.to(
-                    DosenUpdateView(),
+                    TransaksiUpdateView(),
                     arguments: id,
                   );
                 },
               ),
               _buildOptionTile(
                 icon: Icons.delete,
-                title: 'Hapus',
+                title: 'Delete',
                 onTap: () {
                   Get.back();
                   controller.delete(id);
@@ -84,8 +86,9 @@ class DosenView extends GetView<DosenController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: StreamBuilder<QuerySnapshot<Object?>>(
-        stream: Get.put(DosenController()).streamData(),
+        stream: Get.put(TransaksiController()).streamData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
             var listAllDocs = snapshot.data?.docs ?? [];
@@ -93,7 +96,7 @@ class DosenView extends GetView<DosenController> {
                 ? Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [Color(0xFFE3F2FD), Colors.white],
+                        colors: [Color(0xFFE6F2FF), Colors.white],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                       ),
@@ -102,7 +105,14 @@ class DosenView extends GetView<DosenController> {
                       itemCount: listAllDocs.length,
                       padding: const EdgeInsets.all(12),
                       itemBuilder: (context, index) {
-                        var data = listAllDocs[index].data() as Map<String, dynamic>;
+                        var data =
+                            listAllDocs[index].data() as Map<String, dynamic>;
+
+                        // Format the date if it's a Timestamp
+                        String formattedDate = data["tanggal"] != null
+                            ? DateFormat('dd MMM yyyy')
+                                .format((data["tanggal"] as Timestamp).toDate())
+                            : 'N/A';
 
                         return Container(
                           margin: const EdgeInsets.symmetric(vertical: 8),
@@ -118,14 +128,10 @@ class DosenView extends GetView<DosenController> {
                               ),
                             ],
                           ),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
+                          child: ExpansionTile(
                             leading: Container(
                               decoration: BoxDecoration(
-                                color: Color(0xFF0D47A1),
+                                color: Color(0xFF005DAA),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               padding: EdgeInsets.all(10),
@@ -141,11 +147,11 @@ class DosenView extends GetView<DosenController> {
                               data["nama"],
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF0D47A1),
+                                color: Color(0xFF005DAA),
                               ),
                             ),
                             subtitle: Text(
-                              "NIDN: ${data["nidn"]}",
+                              "nomer_rekening: ${data["nomer_rekening"]}",
                               style: TextStyle(
                                 color: Colors.blue.shade700,
                               ),
@@ -153,10 +159,33 @@ class DosenView extends GetView<DosenController> {
                             trailing: IconButton(
                               icon: Icon(
                                 Icons.more_vert,
-                                color: Color(0xFF0D47A1),
+                                color: Color(0xFF005DAA),
                               ),
-                              onPressed: () => showOption(listAllDocs[index].id),
+                              onPressed: () =>
+                                  showOption(listAllDocs[index].id),
                             ),
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    _buildDetailRow(
+                                      'Jenis Transaksi',
+                                      data["jenis_transaksi"] ?? 'N/A',
+                                    ),
+                                    _buildDetailRow(
+                                      'Nominal',
+                                      data["nominal"] ?? 'N/A',
+                                    ),
+                                    _buildDetailRow(
+                                      'Tanggal',
+                                      formattedDate,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       },
@@ -166,16 +195,15 @@ class DosenView extends GetView<DosenController> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.account_circle_outlined,
-                          size: 100,
-                          color: Color(0xFF0D47A1),
+                        Image.asset(
+                          'assets/images/empty_state.png',
+                          width: 200,
                         ),
                         SizedBox(height: 20),
                         Text(
-                          "Tidak Ada Data Dosen",
+                          "Tidak ada data",
                           style: TextStyle(
-                            color: Color(0xFF0D47A1),
+                            color: Color(0xFF005DAA),
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -186,10 +214,35 @@ class DosenView extends GetView<DosenController> {
           }
           return Center(
             child: CircularProgressIndicator(
-              color: Color(0xFF0D47A1),
+              color: Color(0xFF005DAA),
             ),
           );
         },
+      ),
+    );
+  }
+
+  // Helper method to create consistent detail rows
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF005DAA),
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              color: Colors.blue.shade700,
+            ),
+          ),
+        ],
       ),
     );
   }

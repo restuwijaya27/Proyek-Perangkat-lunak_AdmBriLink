@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:myapp/app/modules/transaksi/controllers/transaksi_controller.dart';
+import '../controllers/laporan_controller.dart';
 
-class TransaksiAddView extends GetView<TransaksiController> {
-  const TransaksiAddView({Key? key}) : super(key: key);
+class LaporanAddView extends GetView<LaporanController> {
+  const LaporanAddView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

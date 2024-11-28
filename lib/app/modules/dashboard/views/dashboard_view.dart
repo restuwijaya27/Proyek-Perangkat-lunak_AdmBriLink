@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/dashboard_controller.dart';
-import 'package:myapp/app/modules/dosen/views/dosen_view.dart'; // Import halaman Mahasiswa
+import 'package:myapp/app/modules/laporan/views/laporan_view.dart'; // Import halaman Mahasiswa
 import 'package:myapp/app/modules/transaksi/views/transaksi_view.dart'; // Import halaman Dosen
 
 class DashboardView extends GetView<DashboardController> {
@@ -77,7 +77,7 @@ class DashboardView extends GetView<DashboardController> {
                   'Laporan',
                   Icons.bar_chart,
                   Colors.orange,
-                  () => Get.to(() => DosenView()), // Navigasi ke DosenView
+                  () => Get.to(() => LaporanView()), // Navigasi ke DosenView
                 ),
               ],
             ),

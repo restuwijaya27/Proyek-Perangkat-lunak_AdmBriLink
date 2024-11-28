@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/app/controllers/auth_controller.dart';
 import 'package:myapp/app/modules/dashboard/views/dashboard_view.dart';
-import 'package:myapp/app/modules/dosen/views/dosen_add_view.dart';
-import 'package:myapp/app/modules/dosen/views/dosen_view.dart';
+import 'package:myapp/app/modules/laporan/views/laporan_add_view.dart';
+import 'package:myapp/app/modules/laporan/views/laporan_view.dart';
 import 'package:myapp/app/modules/transaksi/views/transaksi_add_view.dart';
 import 'package:myapp/app/modules/transaksi/views/transaksi_view.dart';
 import '../controllers/home_controller.dart';
@@ -40,9 +40,9 @@ class _DashboardAdminState extends State<DashboardAdmin> {
     },
     {
       'title': 'Laporan',
-      'view': DosenView(),
+      'view': LaporanView(),
       'icon': Icons.report,
-      'add': () => DosenAddView(),
+      'add': () => LaporanAddView(),
     },
   ];
 

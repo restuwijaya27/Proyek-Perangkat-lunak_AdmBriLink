@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class TransaksiController extends GetxController {
+class LaporanController extends GetxController {
   late TextEditingController cNama;
   late TextEditingController cNomer_rekening;
   late TextEditingController cJenis_transaksi;
@@ -96,7 +96,7 @@ class TransaksiController extends GetxController {
     }
   }
 
-  void delete(String id) {
+void delete(String id) {
     DocumentReference docRef = firestore.collection("transaksi").doc(id);
 
     try {
