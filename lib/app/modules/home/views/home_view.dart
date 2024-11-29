@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/app/controllers/auth_controller.dart';
 import 'package:myapp/app/modules/dashboard/views/dashboard_view.dart';
-import 'package:myapp/app/modules/laporan/views/laporan_add_view.dart';
 import 'package:myapp/app/modules/laporan/views/laporan_view.dart';
 import 'package:myapp/app/modules/transaksi/views/transaksi_add_view.dart';
 import 'package:myapp/app/modules/transaksi/views/transaksi_view.dart';
@@ -37,66 +36,65 @@ class _DashboardAdminState extends State<DashboardAdmin> {
       'view': TransaksiView(),
       'icon': Icons.receipt,
       'add': () => TransaksiAddView(),
+      'fullScreen': true, // New property to indicate full screen view
     },
     {
-      'title': 'Laporan',
+     'title': 'Laporan',
       'view': LaporanView(),
       'icon': Icons.report,
-      'add': () => LaporanAddView(),
+      'fullScreen': true,
     },
   ];
 
   @override
   Widget build(BuildContext context) {
+    // Check if current fragment is full screen
+    bool isFullScreen = _fragment[_index].containsKey('fullScreen') 
+        && _fragment[_index]['fullScreen'] == true;
+
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80.0),
-        child: AppBar(
-          elevation: 0,
-          backgroundColor: Color(0xFF005DAA), // BRI Blue
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(20),
+      // Conditionally show AppBar
+      appBar: isFullScreen 
+        ? null 
+        : PreferredSize(
+            preferredSize: Size.fromHeight(80.0),
+            child: AppBar(
+              elevation: 0,
+              backgroundColor: Color(0xFF005DAA), // BRI Blue
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(20),
+                ),
+              ),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    _fragment[_index]['title'],
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
+                  Text(
+                    'Admin Panel',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                _fragment[_index]['title'],
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
-              ),
-              Text(
-                'Admin Panel',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            IconButton(
-              onPressed: () => Get.to(_fragment[_index]['add']),
-              icon: Icon(
-                Icons.add_circle_outline,
-                color: Colors.white,
-                size: 30,
-              ),
-            )
-          ],
-        ),
-      ),
-      drawer: _buildDrawer(),
+      drawer: isFullScreen ? null : _buildDrawer(), // Hide drawer in full screen
       body: _fragment[_index]['view'],
     );
   }
 
+  // Rest of the code remains the same as in the original implementation
   Widget _buildDrawer() {
     return Drawer(
       child: Container(

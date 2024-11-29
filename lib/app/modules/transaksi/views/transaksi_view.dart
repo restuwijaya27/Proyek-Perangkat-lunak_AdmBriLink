@@ -1,230 +1,300 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:myapp/app/modules/home/views/home_view.dart';
 import 'package:myapp/app/modules/transaksi/controllers/transaksi_controller.dart';
+import 'package:myapp/app/modules/transaksi/views/transaksi_add_view.dart';
 import 'package:myapp/app/modules/transaksi/views/transaksi_update_view.dart';
-import 'package:intl/intl.dart'; // Add this for date formatting
 
-class TransaksiView extends GetView<TransaksiController> {
-  void showOption(String id) async {
-    await Get.dialog(
-      Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF005DAA), Color(0xFF00A3E1)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(15),
+class TransaksiView extends StatelessWidget {
+  final TransaksiController controller = Get.put(TransaksiController());
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 26, 35, 126),
+     appBar: AppBar(
+  elevation: 0,
+  backgroundColor: Colors.transparent, // Membuat AppBar transparan
+  leading: IconButton(
+    icon: Icon(Icons.arrow_back, color: Colors.white), // Warna ikon sesuai
+    onPressed: () {
+      Get.offAll(() => HomeView());
+    },
+  ),
+),
+
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF1A237E), Color(0xFF283593), Color(0xFF3F51B5)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
+        ),
+        child: SafeArea(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Pilih Aksi',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              _buildOptionTile(
-                icon: Icons.edit,
-                title: 'Update',
-                onTap: () {
-                  Get.back();
-                  Get.to(
-                    TransaksiUpdateView(),
-                    arguments: id,
-                  );
-                },
-              ),
-              _buildOptionTile(
-                icon: Icons.delete,
-                title: 'Delete',
-                onTap: () {
-                  Get.back();
-                  controller.delete(id);
-                },
-              ),
-              _buildOptionTile(
-                icon: Icons.close,
-                title: 'Close',
-                onTap: () => Get.back(),
+              _buildHeaderSection(),
+              Expanded(
+                child: _buildTransactionList(),
               ),
             ],
           ),
         ),
       ),
-      barrierDismissible: false,
+      floatingActionButton: _buildAddTransactionButton(),
     );
   }
 
-  Widget _buildOptionTile({
-    required IconData icon,
-    required String title,
-    required VoidCallback onTap,
-  }) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.white),
-      title: Text(
-        title,
-        style: TextStyle(color: Colors.white),
+  Widget _buildHeaderSection() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TweenAnimationBuilder<double>(
+            duration: Duration(milliseconds: 500),
+            tween: Tween(begin: 0, end: 1),
+            builder: (context, opacity, child) {
+              return Opacity(
+                opacity: opacity,
+                child: Transform.translate(
+                  offset: Offset(0, 20 * (1 - opacity)),
+                  child: child,
+                ),
+              );
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Transaksi',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Kelola Transaksi Anda dengan Mudah',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      onTap: onTap,
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: StreamBuilder<QuerySnapshot<Object?>>(
-        stream: Get.put(TransaksiController()).streamData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.active) {
-            var listAllDocs = snapshot.data?.docs ?? [];
-            return listAllDocs.isNotEmpty
-                ? Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Color(0xFFE6F2FF), Colors.white],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ),
-                    ),
-                    child: ListView.builder(
-                      itemCount: listAllDocs.length,
-                      padding: const EdgeInsets.all(12),
-                      itemBuilder: (context, index) {
-                        var data =
-                            listAllDocs[index].data() as Map<String, dynamic>;
-
-                        // Format the date if it's a Timestamp
-                        String formattedDate = data["tanggal"] != null
-                            ? DateFormat('dd MMM yyyy').format(
-                                (data["tanggal"] as Timestamp).toDate())
-                            : 'N/A';
-
-                        return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.blue.shade100,
-                                spreadRadius: 1,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: ExpansionTile(
-                            leading: Container(
-                              decoration: BoxDecoration(
-                                color: Color(0xFF005DAA),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                '${index + 1}',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              data["nama"],
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF005DAA),
-                              ),
-                            ),
-                            subtitle: Text(
-                              "nomer_rekening: ${data["nomer_rekening"]}",
-                              style: TextStyle(
-                                color: Colors.blue.shade700,
-                              ),
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(
-                                Icons.more_vert,
-                                color: Color(0xFF005DAA),
-                              ),
-                              onPressed: () =>
-                                  showOption(listAllDocs[index].id),
-                            ),
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _buildDetailRow(
-                                      'Jenis Transaksi',
-                                      data["jenis_transaksi"] ?? 'N/A',
-                                    ),
-                                    _buildDetailRow(
-                                      'Nominal',
-                                      data["nominal"] ?? 'N/A',
-                                    ),
-                                    _buildDetailRow(
-                                      'Tanggal',
-                                      formattedDate,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                : Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/images/empty_state.png',
-                          width: 200,
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          "Tidak ada data",
-                          style: TextStyle(
-                            color: Color(0xFF005DAA),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-          }
+  Widget _buildTransactionList() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: controller.streamData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator(
-              color: Color(0xFF005DAA),
+              color: Colors.white,
             ),
           );
-        },
+        }
+
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return _buildEmptyState();
+        }
+
+        return ListView.builder(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (context, index) {
+            var data =
+                snapshot.data!.docs[index].data() as Map<String, dynamic>;
+            return TweenAnimationBuilder<double>(
+              duration: Duration(milliseconds: 500),
+              tween: Tween(begin: 0, end: 1),
+              builder: (context, opacity, child) {
+                return Opacity(
+                  opacity: opacity,
+                  child: Transform.translate(
+                    offset: Offset(0, 50 * (1 - opacity)),
+                    child: child,
+                  ),
+                );
+              },
+              child: _buildTransactionCard(data, snapshot.data!.docs[index].id),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildTransactionCard(Map<String, dynamic> data, String docId) {
+    return GestureDetector(
+      onTap: () => _showTransactionDetails(data),
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.white.withOpacity(0.3)),
+        ),
+        child: ListTile(
+          contentPadding: EdgeInsets.all(16),
+          leading: CircleAvatar(
+            backgroundColor: Colors.white.withOpacity(0.3),
+            child: Icon(
+              _getIconForTransactionType(data["jenis_transaksi"]),
+              color: Colors.white,
+            ),
+          ),
+          title: Text(
+            data["nama"],
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          subtitle: Text(
+            _formatCurrency(data["nominal"]),
+            style: TextStyle(
+              color: Colors.white70,
+            ),
+          ),
+          trailing: IconButton(
+            icon: Icon(Icons.more_vert, color: Colors.white),
+            onPressed: () => _showTransactionOptions(docId),
+          ),
+        ),
       ),
     );
   }
 
-  // Helper method to create consistent detail rows
+  void _showTransactionDetails(Map<String, dynamic> data) {
+    Get.bottomSheet(
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Detail Transaksi',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1A237E),
+                ),
+              ),
+              SizedBox(height: 20),
+              _buildDetailRow('Nama', data['nama']),
+              _buildDetailRow('Nomor Rekening', data['nomer_rekening']),
+              _buildDetailRow('Jenis Transaksi', data['jenis_transaksi']),
+              _buildDetailRow('Nominal', _formatCurrency(data['nominal'])),
+              _buildDetailRow(
+                  'Tanggal',
+                  DateFormat('dd MMM yyyy')
+                      .format((data['tanggal'] as Timestamp).toDate())),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.inbox_outlined,
+            size: 100,
+            color: Colors.white54,
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Tidak Ada Transaksi',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 10),
+          Text(
+            'Tambahkan transaksi pertama Anda',
+            style: TextStyle(
+              color: Colors.white70,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAddTransactionButton() {
+    return FloatingActionButton.extended(
+      onPressed: () => Get.to(() => TransaksiAddView()),
+      backgroundColor: Colors.white,
+      icon: Icon(Icons.add, color: Color(0xFF1A237E)),
+      label: Text(
+        'Tambah Transaksi',
+        style: TextStyle(
+          color: Color(0xFF1A237E),
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  void _showTransactionOptions(String docId) {
+    Get.bottomSheet(
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: Icon(Icons.edit, color: Colors.blue),
+              title: Text('Update'),
+              onTap: () {
+                Get.back();
+                Get.to(() => TransaksiUpdateView(), arguments: docId);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.delete, color: Colors.red),
+              title: Text('Delete'),
+              onTap: () {
+                Get.back();
+                controller.delete(docId);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Helper Methods
   Widget _buildDetailRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -232,17 +302,43 @@ class TransaksiView extends GetView<TransaksiController> {
             label,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Color(0xFF005DAA),
+              color: Colors.black87,
             ),
           ),
           Text(
             value,
             style: TextStyle(
-              color: Colors.blue.shade700,
+              color: Colors.black54,
             ),
           ),
         ],
       ),
     );
+  }
+
+  String _formatCurrency(String value) {
+    // Remove any non-numeric characters
+    String cleanedValue = value.replaceAll(RegExp(r'[^0-9]'), '');
+
+    // Parse the cleaned string to an integer
+    int? parsedValue = int.tryParse(cleanedValue);
+
+    // Return formatted currency or original value if parsing fails
+    return parsedValue != null
+        ? NumberFormat.currency(
+                locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0)
+            .format(parsedValue)
+        : value;
+  }
+
+  IconData _getIconForTransactionType(String type) {
+    switch (type?.toLowerCase()) {
+      case 'pemasukan':
+        return Icons.arrow_upward;
+      case 'pengeluaran':
+        return Icons.arrow_downward;
+      default:
+        return Icons.swap_horiz;
+    }
   }
 }
