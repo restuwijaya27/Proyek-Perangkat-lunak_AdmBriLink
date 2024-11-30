@@ -428,6 +428,9 @@ class _LaporanViewState extends State<LaporanView>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
+                                'Kode Struk: ${data['kode_struk'] ?? 'N/A'}',
+                              ),
+                              Text(
                                   'Nomor Rekening: ${data['nomer_rekening'] ?? 'N/A'}'),
                               Text(
                                 'Tanggal: ${timestamp != null ? DateFormat('d MMM yyyy').format(timestamp.toDate()) : 'N/A'}',
