@@ -8,6 +8,8 @@ class TransaksiController extends GetxController {
   late TextEditingController cJenis_transaksi;
   late TextEditingController cNominal;
   late TextEditingController cTanggal;
+  late TextEditingController cKode_struk;
+
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<QuerySnapshot<Object?>> GetData() async {
@@ -22,7 +24,7 @@ class TransaksiController extends GetxController {
   }
 
   void add(String nama, String nomer_rekening, String jenis_transaksi,
-      String nominal, String tanggal) async {
+      String nominal, String tanggal, String kode_struk) async {
     CollectionReference transaksi = firestore.collection("transaksi");
 
     try {
@@ -32,6 +34,7 @@ class TransaksiController extends GetxController {
         "jenis_transaksi": jenis_transaksi,
         "nominal": nominal,
         "tanggal": DateTime.now(),
+        "kode_struk": kode_struk,
       });
       Get.defaultDialog(
           title: "Berhasil",
@@ -42,6 +45,7 @@ class TransaksiController extends GetxController {
             cJenis_transaksi.clear();
             cNominal.clear();
             cTanggal.clear();
+            cKode_struk.clear();
             Get.back();
             Get.back();
             textConfirm:
@@ -63,7 +67,7 @@ class TransaksiController extends GetxController {
   }
 
   void Update(String nama, String nomer_rekening, String jenis_transaksi,
-      String nominal, String id) async {
+      String nominal, String kode_struk, String id) async {
     DocumentReference transaksiById = firestore.collection("transaksi").doc(id);
 
     try {
@@ -72,6 +76,7 @@ class TransaksiController extends GetxController {
         "nomer_rekening": nomer_rekening,
         "jenis_transaksi": jenis_transaksi,
         "nominal": nominal,
+        "kode_struk": kode_struk,
       });
 
       Get.defaultDialog(
@@ -82,6 +87,7 @@ class TransaksiController extends GetxController {
           cNomer_rekening.clear();
           cJenis_transaksi.clear();
           cNominal.clear();
+          cKode_struk.clear();
           Get.back();
           Get.back();
         },
@@ -131,6 +137,7 @@ class TransaksiController extends GetxController {
     cJenis_transaksi = TextEditingController();
     cNominal = TextEditingController();
     cTanggal = TextEditingController();
+    cKode_struk = TextEditingController();
     super.onInit();
   }
 
@@ -142,6 +149,7 @@ class TransaksiController extends GetxController {
     cJenis_transaksi.dispose();
     cNominal.dispose();
     cTanggal.dispose();
+    cKode_struk.dispose();
     super.onClose();
   }
 }

@@ -88,6 +88,12 @@ class TransaksiUpdateView extends GetView<TransaksiController> {
                       labelText: "Nominal",
                       icon: Icons.attach_money,
                     ),
+                    SizedBox(height: 15),
+                    _buildTextField(
+                      controller: controller.cKode_struk,
+                      labelText: "Kode Struk",
+                      icon: Icons.description,
+                    ),
                     SizedBox(height: 30),
                     ElevatedButton(
                       onPressed: () => controller.Update(
@@ -95,6 +101,7 @@ class TransaksiUpdateView extends GetView<TransaksiController> {
                         controller.cNomer_rekening.text,
                         controller.cJenis_transaksi.text,
                         controller.cNominal.text,
+                        controller.cKode_struk.text,
                         Get.arguments,
                       ),
                       style: ElevatedButton.styleFrom(

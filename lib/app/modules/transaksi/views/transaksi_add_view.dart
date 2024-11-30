@@ -70,6 +70,13 @@ class TransaksiAddView extends GetView<TransaksiController> {
                     keyboardType: TextInputType.number,
                   ),
                   SizedBox(height: 15),
+                  _buildTextField(
+                    controller: controller.cKode_struk,
+                    label: "Kode Struk",
+                    icon: Icons.description,
+                    keyboardType: TextInputType.number,
+                  ),
+                  SizedBox(height: 15),
                   _buildDateField(context),
                   SizedBox(height: 25),
                   ElevatedButton(
@@ -78,7 +85,8 @@ class TransaksiAddView extends GetView<TransaksiController> {
                       controller.cNomer_rekening.text,
                       controller.cJenis_transaksi.text,
                       controller.cNominal.text,
-                      controller.cTanggal.text
+                      controller.cTanggal.text,
+                      controller.cKode_struk.text,
                     ),
                     style: ElevatedButton.styleFrom( // BRI Blue
                       padding: EdgeInsets.symmetric(vertical: 15),

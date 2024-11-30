@@ -201,6 +201,7 @@ class TransaksiView extends StatelessWidget {
               _buildDetailRow('Nama', data['nama']),
               _buildDetailRow('Nomor Rekening', data['nomer_rekening']),
               _buildDetailRow('Jenis Transaksi', data['jenis_transaksi']),
+              _buildDetailRow('Kode Struk', data['kode_struk']),
               _buildDetailRow('Nominal', _formatCurrency(data['nominal'])),
               _buildDetailRow(
                   'Tanggal',
