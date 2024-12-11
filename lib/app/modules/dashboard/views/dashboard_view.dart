@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/dashboard_controller.dart';
-import 'package:myapp/app/modules/laporan/views/laporan_view.dart';
-import 'package:myapp/app/modules/transaksi/views/transaksi_view.dart';
+import 'package:myapp/app/modules/laporan/views/laporan_view.dart'; // Import halaman Mahasiswa
+import 'package:myapp/app/modules/transaksi/views/transaksi_view.dart'; // Import halaman Dosen
 
 class DashboardView extends GetView<DashboardController> {
   const DashboardView({super.key});
@@ -19,16 +19,12 @@ class DashboardView extends GetView<DashboardController> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blue.shade200, Colors.blue.shade400],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: Colors.blue.shade100,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.person, size: 50, color: Colors.white),
+                  const Icon(Icons.person, size: 50, color: Colors.blue),
                   const SizedBox(width: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,17 +32,14 @@ class DashboardView extends GetView<DashboardController> {
                       Text(
                         'Selamat Datang, Mitra!',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: Colors.blue,
                         ),
                       ),
                       Text(
                         'Kelola ATM Anda dengan mudah.',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white70,
-                        ),
+                        style: TextStyle(fontSize: 14, color: Colors.blueGrey),
                       ),
                     ],
                   ),
@@ -78,13 +71,14 @@ class DashboardView extends GetView<DashboardController> {
                   'Riwayat Transaksi',
                   Icons.history,
                   Colors.blue,
-                  () => Get.to(() => TransaksiView()),
+                  () => Get.to(
+                      () => TransaksiView()), // Navigasi ke MahasiswaView
                 ),
                 _buildMenuCard(
                   'Laporan',
                   Icons.bar_chart,
                   Colors.orange,
-                  () => Get.to(() => LaporanView()),
+                  () => Get.to(() => LaporanView()), // Navigasi ke DosenView
                 ),
               ],
             ),
@@ -97,34 +91,22 @@ class DashboardView extends GetView<DashboardController> {
   Widget _buildMenuCard(
       String title, IconData icon, Color color, VoidCallback onTap) {
     return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+      onTap: onTap, // Panggil fungsi navigasi
+      child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: color.withOpacity(0.1),
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: color.withOpacity(0.3),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 50, color: color),
+            Icon(icon, size: 40, color: color),
             const SizedBox(height: 10),
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.blueGrey,
-              ),
+              style: const TextStyle(fontSize: 14, color: Colors.blueGrey),
             ),
           ],
         ),
