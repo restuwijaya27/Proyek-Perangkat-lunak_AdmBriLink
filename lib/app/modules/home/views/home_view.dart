@@ -9,6 +9,7 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   final cAuth = Get.find<AuthController>();
+  
   @override
   Widget build(BuildContext context) {
     return DashboardAdmin();
@@ -25,6 +26,7 @@ class DashboardAdmin extends StatefulWidget {
 class _DashboardAdminState extends State<DashboardAdmin> {
   final cAuth = Get.find<AuthController>();
   int _index = 0;
+
   List<Map> _fragment = [
     {
       'title': 'Dashboard',
@@ -39,7 +41,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
       'fullScreen': true, // New property to indicate full screen view
     },
     {
-     'title': 'Laporan',
+      'title': 'Laporan',
       'view': LaporanView(),
       'icon': Icons.report,
       'fullScreen': true,
@@ -48,13 +50,11 @@ class _DashboardAdminState extends State<DashboardAdmin> {
 
   @override
   Widget build(BuildContext context) {
-    // Check if current fragment is full screen
     bool isFullScreen = _fragment[_index].containsKey('fullScreen') 
         && _fragment[_index]['fullScreen'] == true;
 
     return Scaffold(
       backgroundColor: Colors.white,
-      // Conditionally show AppBar
       appBar: isFullScreen 
         ? null 
         : PreferredSize(
@@ -64,7 +64,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
               backgroundColor: Color(0xFF005DAA), // BRI Blue
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(20),
+                  bottom: Radius.circular(30),
                 ),
               ),
               title: Column(
@@ -75,7 +75,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 22,
+                      fontSize: 24,
                     ),
                   ),
                   Text(
@@ -89,12 +89,11 @@ class _DashboardAdminState extends State<DashboardAdmin> {
               ),
             ),
           ),
-      drawer: isFullScreen ? null : _buildDrawer(), // Hide drawer in full screen
+      drawer: isFullScreen ? null : _buildDrawer(),
       body: _fragment[_index]['view'],
     );
   }
 
-  // Rest of the code remains the same as in the original implementation
   Widget _buildDrawer() {
     return Drawer(
       child: Container(
@@ -117,18 +116,19 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CircleAvatar(
-                    radius: 50,
+                    radius: 40, // Ukuran lebih kecil
                     backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.account_circle,
-                      size: 80,
-                      color: Color(0xFF005DAA),
+                    child: Image.asset(
+                      'assets/images/bri.jpg', // Menggunakan gambar lokal
+                      height: 60,  // Ukuran gambar lebih kecil
+                      width: 60,   // Ukuran gambar lebih kecil
+                      fit: BoxFit.contain, // Agar gambar tidak terpotong
                     ),
                   ),
                   Text(
                     'Admin',
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: 16,
                       color: Colors.white70,
                     ),
                   ),
@@ -136,6 +136,31 @@ class _DashboardAdminState extends State<DashboardAdmin> {
               ),
             ),
             ..._buildDrawerItems(),
+            Spacer(), // Menambahkan spacer untuk memisahkan konten utama dan footer
+            // Gambar di bawah tombol logout
+            Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(10),
+              child: Image.asset(
+                'assets/images/bri.jpg', // Gambar tambahan di bawah tombol logout
+                height: 80,  // Ukuran gambar lebih kecil
+                width: 80,   // Ukuran gambar lebih kecil
+                fit: BoxFit.contain, // Agar gambar tidak terpotong
+              ),
+            ),
+            // Menambahkan teks "Version 0.9.9" di bawah gambar
+            Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(8),
+              child: Text(
+                'Version 0.9.9',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -144,25 +169,25 @@ class _DashboardAdminState extends State<DashboardAdmin> {
 
   List<Widget> _buildDrawerItems() {
     return _fragment
-            .map((item) => _drawerItem(
-                  icon: item['icon'],
-                  title: item['title'],
-                  onTap: () {
-                    setState(() => _index = _fragment.indexOf(item));
-                    Get.back();
-                  },
-                ))
-            .toList() +
-        [
-          _drawerItem(
-            icon: Icons.logout,
-            title: 'Logout',
+      .map((item) => _drawerItem(
+            icon: item['icon'],
+            title: item['title'],
             onTap: () {
+              setState(() => _index = _fragment.indexOf(item));
               Get.back();
-              cAuth.logout();
             },
-          ),
-        ];
+          ))
+      .toList() +
+      [
+        _drawerItem(
+          icon: Icons.logout,
+          title: 'Logout',
+          onTap: () {
+            Get.back();
+            cAuth.logout();
+          },
+        ),
+      ];
   }
 
   Widget _drawerItem({
@@ -175,13 +200,14 @@ class _DashboardAdminState extends State<DashboardAdmin> {
       leading: Icon(
         icon,
         color: Colors.white,
-        size: 25,
+        size: 28,
       ),
       title: Text(
         title,
         style: TextStyle(
           color: Colors.white,
-          fontSize: 16,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
         ),
       ),
       trailing: Icon(
