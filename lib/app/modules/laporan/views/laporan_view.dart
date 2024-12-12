@@ -166,67 +166,7 @@ class _LaporanViewState extends State<LaporanView>
                           color: Colors.transparent,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(15),
-                            splashColor: Colors.white24,
-                            onTap: () {
-                              setState(() => selectedMonth =
-                                  DateTime(selectedYear, selectedMonthIndex));
-                              Navigator.of(context).pop();
-                            },
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 14),
-                              child: Text(
-                                'Pilih Periode',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  Stream<QuerySnapshot> _getFilteredStream() {
-    Query query = FirebaseFirestore.instance.collection('transaksi');
-    if (selectedMonth != null) {
-      query = query
-          .where('tanggal',
-              isGreaterThanOrEqualTo: Timestamp.fromDate(
-                  DateTime(selectedMonth!.year, selectedMonth!.month, 1)))
-          .where('tanggal',
-              isLessThan: Timestamp.fromDate(
-                  DateTime(selectedMonth!.year, selectedMonth!.month + 1, 1)));
-    }
-    return query.snapshots();
-  }
-
-  Future<Map<String, dynamic>> _calculateMonthlyTotal() async {
-    if (selectedMonth == null) return {'total': 0, 'count': 0};
-
-    final querySnapshot = await FirebaseFirestore.instance
-        .collection('transaksi')
-        .where('tanggal',
-            isGreaterThanOrEqualTo: Timestamp.fromDate(
-                DateTime(selectedMonth!.year, selectedMonth!.month, 1)))
-        .where('tanggal',
-            isLessThan: Timestamp.fromDate(
-                DateTime(selectedMonth!.year, selectedMonth!.month + 1, 1)))
-        .get();
-
-    double totalNominal = 0;
+          double totalNominal = 0;
     querySnapshot.docs.forEach((doc) {
       var data = doc.data();
       totalNominal += _parseNominal(data['nominal']);
