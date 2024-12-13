@@ -94,7 +94,7 @@ class LoginView extends GetView<LoginController> {
                     SizedBox(height: screenHeight * 0.01),
 
                     Text(
-                      "ADM Bri Link",
+                      "Adm Bri Link",
                       style: TextStyle(
                         fontSize: screenHeight * 0.02,
                         color: Colors.white.withOpacity(0.9),
