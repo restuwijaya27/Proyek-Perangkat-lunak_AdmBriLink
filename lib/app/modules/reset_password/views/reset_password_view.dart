@@ -13,15 +13,15 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Blue Gradient Background
+          // BRI Blue Background Gradient
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Color(0xFF0D47A1),
-                  Color(0xFF42A5F5),
+                  Color(0xFF0D47A1), // Deep BRI Blue
+                  Color(0xFF1976D2), // Lighter Blue
                 ],
               ),
             ),
@@ -34,23 +34,23 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
             child: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.white, size: 30),
               onPressed: () {
-                Get.offAllNamed(Routes.LOGIN);
+                Get.offAllNamed(Routes.LOGIN); // Navigate back to login page
               },
             ),
           ),
 
-          // Reset Password Form
+          // White Container with Reset Password Form
           Center(
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.all(30),
+              padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.shade200,
-                    blurRadius: 20,
+                    color: Colors.blue.shade100,
+                    blurRadius: 15,
                     spreadRadius: 5,
                   )
                 ],
@@ -60,73 +60,46 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Image.asset(
-                      'assets/images/reset_password_illustration.png',
-                      height: 150,
+                      'assets/images/bri.jpg', 
+                      height: 200,
+                      width: 300,
                     ),
-                    SizedBox(height: 20),
-                    Text(
-                      "Reset Your Password",
-                      style: TextStyle(
-                        color: Color(0xFF0D47A1),
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Enter your email address and we'll send you instructions to reset your password.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 16,
-                      ),
-                    ),
-                    SizedBox(height: 20),
                     TextField(
                       controller: controller.cEmail,
                       decoration: InputDecoration(
                         labelText: "Email",
                         prefixIcon: Icon(Icons.email, color: Color(0xFF0D47A1)),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(color: Color(0xFF0D47A1)),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(color: Color(0xFF0D47A1), width: 2),
                         ),
                       ),
                     ),
                     SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        cAuth.resetPassword(controller.cEmail.text);
-                      },
-                      child: Text(
-                        "Reset Password",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                    Container(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          cAuth.resetPassword(controller.cEmail.text);
+                        },
+                        child: Text(
+                          "Reset Password",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF0D47A1),
-                        padding: EdgeInsets.symmetric(vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    TextButton(
-                      onPressed: () {
-                        Get.offAllNamed(Routes.LOGIN);
-                      },
-                      child: Text(
-                        "Remember your password? Log In",
-                        style: TextStyle(
-                          color: Color(0xFF0D47A1),
-                          fontSize: 16,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF0D47A1),
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(vertical: 15),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                       ),
                     ),
