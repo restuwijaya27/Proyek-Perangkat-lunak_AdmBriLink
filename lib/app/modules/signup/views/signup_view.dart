@@ -14,15 +14,15 @@ class SignupView extends GetView<SignupController> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Header with Blue Background
+              // Header with Modern Gradient and Illustration
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(
-                    vertical: MediaQuery.of(context).size.height * 0.04,
+                    vertical: MediaQuery.of(context).size.height * 0.05,
                     horizontal: MediaQuery.of(context).size.width * 0.05),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Color(0xFF0D47A1), Color(0xFF1565C0)],
+                    colors: [Color(0xFF0077B6), Color(0xFF0096C7)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -34,20 +34,17 @@ class SignupView extends GetView<SignupController> {
                 child: Column(
                   children: [
                     Image.asset(
-                      'assets/images/bri.jpg',
-                      height: MediaQuery.of(context).size.height *
-                          0.30, // Increased from 0.04
-                      width: MediaQuery.of(context).size.width *
-                          0.6, // Increased from 0.05
+                      'assets/images/illustration.png',
+                      height: MediaQuery.of(context).size.height * 0.25,
                       fit: BoxFit.contain,
-                      color: Colors.white,
                     ),
+                    SizedBox(height: 10),
                     Text(
                       "Create Your Account",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: MediaQuery.of(context).textScaler.scale(24),
-                        fontWeight: FontWeight.bold,
+                        fontSize: 26,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ],
@@ -63,7 +60,7 @@ class SignupView extends GetView<SignupController> {
                       controller: controller.cEmail,
                       labelText: "Email",
                       icon: Icons.email,
-                      borderColor: Color(0xFF0D47A1),
+                      borderColor: Color(0xFF0077B6),
                     ),
                     SizedBox(height: 20),
                     _buildInputField(
@@ -71,11 +68,11 @@ class SignupView extends GetView<SignupController> {
                       labelText: "Password",
                       icon: Icons.lock,
                       obscureText: true,
-                      borderColor: Color(0xFF0D47A1),
+                      borderColor: Color(0xFF0077B6),
                     ),
                     SizedBox(height: 30),
 
-                    // Signup Button
+                    // Signup Button with Animation
                     ElevatedButton(
                       onPressed: () {
                         cAuth.signup(
@@ -89,26 +86,44 @@ class SignupView extends GetView<SignupController> {
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF0D47A1),
-                        foregroundColor: Colors.white,
+                        backgroundColor: Color(0xFF0077B6),
                         minimumSize: Size(double.infinity, 50),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(15),
                         ),
+                        elevation: 5,
                       ),
                     ),
                     SizedBox(height: 20),
 
+                    // Social Media Sign Up Options
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.facebook, color: Color(0xFF0077B6)),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.g_mobiledata, color: Color(0xFF0077B6)),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.apple, color: Color(0xFF0077B6)),
+                          onPressed: () {},
+                        ),
+                      ],
+                    ),
+
                     // Login Navigation Button
                     TextButton(
                       onPressed: () {
-                        // Assuming you have a named route for login page
                         Get.toNamed('/login');
                       },
                       child: Text(
                         "Already have an account? Log In",
                         style: TextStyle(
-                          color: Color(0xFF0D47A1),
+                          color: Color(0xFF0077B6),
                           fontSize: 16,
                         ),
                       ),
@@ -137,15 +152,15 @@ class SignupView extends GetView<SignupController> {
         prefixIcon: Icon(icon, color: borderColor),
         labelText: labelText,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(color: borderColor, width: 2),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(color: borderColor.withOpacity(0.5), width: 1),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide(color: borderColor, width: 2),
         ),
       ),
