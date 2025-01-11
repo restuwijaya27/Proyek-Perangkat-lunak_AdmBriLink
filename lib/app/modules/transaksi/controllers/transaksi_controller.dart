@@ -3,153 +3,142 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TransaksiController extends GetxController {
-  late TextEditingController cNama;
-  late TextEditingController cNomer_rekening;
-  late TextEditingController cJenis_transaksi;
-  late TextEditingController cNominal;
-  late TextEditingController cTanggal;
-  late TextEditingController cKode_struk;
+  // Controllers for form fields
+  final TextEditingController cNama = TextEditingController();
+  final TextEditingController cNomerRekening = TextEditingController();
+  final TextEditingController cJenisTransaksi = TextEditingController();
+  final TextEditingController cNominal = TextEditingController();
+  final TextEditingController cTanggal = TextEditingController();
+  final TextEditingController cKodeStruk = TextEditingController();
 
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<QuerySnapshot<Object?>> GetData() async {
-    CollectionReference transaksi = firestore.collection('transaksi');
-
-    return transaksi.get();
+  // Fetch all transactions
+  Future<QuerySnapshot<Object?>> getData() async {
+    return firestore.collection('transaksi').get();
   }
 
+  // Stream of transactions data
   Stream<QuerySnapshot<Object?>> streamData() {
-    CollectionReference transaksi = firestore.collection('transaksi');
-    return transaksi.snapshots();
+    return firestore.collection('transaksi').snapshots();
   }
 
-  void add(String nama, String nomer_rekening, String jenis_transaksi,
-      String nominal, String tanggal, String kode_struk) async {
-    CollectionReference transaksi = firestore.collection("transaksi");
-
+  // Add a new transaction
+  Future<void> addTransaction({
+    required String nama,
+    required String nomerRekening,
+    required String jenisTransaksi,
+    required String nominal,
+    required String kodeStruk,
+  }) async {
     try {
-      await transaksi.add({
+      await firestore.collection("transaksi").add({
         "nama": nama,
-        "nomer_rekening": nomer_rekening,
-        "jenis_transaksi": jenis_transaksi,
+        "nomer_rekening": nomerRekening,
+        "jenis_transaksi": jenisTransaksi,
         "nominal": nominal,
         "tanggal": DateTime.now(),
-        "kode_struk": kode_struk,
+        "kode_struk": kodeStruk,
       });
-      Get.defaultDialog(
-          title: "Berhasil",
-          middleText: "Berhasil menyimpan data transaksi",
-          onConfirm: () {
-            cNama.clear();
-            cNomer_rekening.clear();
-            cJenis_transaksi.clear();
-            cNominal.clear();
-            cTanggal.clear();
-            cKode_struk.clear();
-            Get.back();
-            Get.back();
-            textConfirm:
-            "OK";
-          });
-    } catch (e) {
-      print(e);
-      Get.defaultDialog(
-        title: "Terjadi Kesalahan",
-        middleText: "Gagal Menambahkan Transaksi.",
-      );
-    }
-  }
-
-  Future<DocumentSnapshot<Object?>> GetDataById(String id) async {
-    DocumentReference docRef = firestore.collection("transaksi").doc(id);
-
-    return docRef.get();
-  }
-
-  void Update(String nama, String nomer_rekening, String jenis_transaksi,
-      String nominal, String kode_struk, String id) async {
-    DocumentReference transaksiById = firestore.collection("transaksi").doc(id);
-
-    try {
-      await transaksiById.update({
-        "nama": nama,
-        "nomer_rekening": nomer_rekening,
-        "jenis_transaksi": jenis_transaksi,
-        "nominal": nominal,
-        "kode_struk": kode_struk,
-      });
-
-      Get.defaultDialog(
+      _showDialog(
         title: "Berhasil",
-        middleText: "Berhasil mengubah data Transaksi.",
-        onConfirm: () {
-          cNama.clear();
-          cNomer_rekening.clear();
-          cJenis_transaksi.clear();
-          cNominal.clear();
-          cKode_struk.clear();
-          Get.back();
-          Get.back();
-        },
-        textConfirm: "OK",
+        message: "Berhasil menyimpan data transaksi",
+        onConfirm: _clearFormFields,
       );
     } catch (e) {
-      print(e);
-      Get.defaultDialog(
+      _showDialog(
         title: "Terjadi Kesalahan",
-        middleText: "Gagal Menambahkan Transaksi.",
+        message: "Gagal Menambahkan Transaksi.",
       );
     }
   }
 
-  void delete(String id) {
-    DocumentReference docRef = firestore.collection("transaksi").doc(id);
+  // Fetch transaction by ID
+  Future<DocumentSnapshot<Object?>> getDataById(String id) async {
+    return firestore.collection("transaksi").doc(id).get();
+  }
 
+  // Update transaction
+  Future<void> updateTransaction({
+    required String id,
+    required String nama,
+    required String nomerRekening,
+    required String jenisTransaksi,
+    required String nominal,
+    required String kodeStruk,
+  }) async {
+    try {
+      await firestore.collection("transaksi").doc(id).update({
+        "nama": nama,
+        "nomer_rekening": nomerRekening,
+        "jenis_transaksi": jenisTransaksi,
+        "nominal": nominal,
+        "kode_struk": kodeStruk,
+      });
+      _showDialog(
+        title: "Berhasil",
+        message: "Berhasil mengubah data transaksi.",
+        onConfirm: _clearFormFields,
+      );
+    } catch (e) {
+      _showDialog(
+        title: "Terjadi Kesalahan",
+        message: "Gagal mengubah transaksi.",
+      );
+    }
+  }
+
+  // Delete transaction
+  Future<void> deleteTransaction(String id) async {
     try {
       Get.defaultDialog(
         title: "Info",
-        middleText: "Apakah anda yakin menghapus data ini ?",
-        onConfirm: () {
-          docRef.delete();
+        middleText: "Apakah anda yakin menghapus data ini?",
+        onConfirm: () async {
+          await firestore.collection("transaksi").doc(id).delete();
           Get.back();
-          Get.defaultDialog(
-            title: "Sukses",
-            middleText: "Berhasil menghapus data",
-          );
+          _showDialog(title: "Sukses", message: "Berhasil menghapus data");
         },
         textConfirm: "Ya",
         textCancel: "Batal",
       );
     } catch (e) {
-      print(e);
-      Get.defaultDialog(
+      _showDialog(
         title: "Terjadi kesalahan",
-        middleText: "Tidak berhasil menghapus data",
+        message: "Tidak berhasil menghapus data",
       );
     }
   }
 
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    cNama = TextEditingController();
-    cNomer_rekening = TextEditingController();
-    cJenis_transaksi = TextEditingController();
-    cNominal = TextEditingController();
-    cTanggal = TextEditingController();
-    cKode_struk = TextEditingController();
-    super.onInit();
+  // Clear form fields
+  void _clearFormFields() {
+    cNama.clear();
+    cNomerRekening.clear();
+    cJenisTransaksi.clear();
+    cNominal.clear();
+    cTanggal.clear();
+    cKodeStruk.clear();
+    Get.back();
+  }
+
+  // Show dialog utility
+  void _showDialog({required String title, required String message, VoidCallback? onConfirm}) {
+    Get.defaultDialog(
+      title: title,
+      middleText: message,
+      onConfirm: onConfirm,
+      textConfirm: "OK",
+    );
   }
 
   @override
   void onClose() {
-    // TODO: implement onClose
     cNama.dispose();
-    cNomer_rekening.dispose();
-    cJenis_transaksi.dispose();
+    cNomerRekening.dispose();
+    cJenisTransaksi.dispose();
     cNominal.dispose();
     cTanggal.dispose();
-    cKode_struk.dispose();
+    cKodeStruk.dispose();
     super.onClose();
   }
 }
